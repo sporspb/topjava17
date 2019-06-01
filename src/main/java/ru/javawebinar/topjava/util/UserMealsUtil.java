@@ -30,14 +30,10 @@ public class UserMealsUtil {
         for (UserMeal meal : mealList) {
             map.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
         }
-        map.entrySet().removeIf((localDateIntegerEntry -> localDateIntegerEntry.getValue() <= caloriesPerDay));
+
         for (UserMeal meal : mealList) {
-            boolean exceedStatus = false;
-            if (map.containsKey(meal.getDateTime().toLocalDate())) {
-                exceedStatus = true;
-            }
             if (TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime)) {
-                list.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceedStatus));
+                list.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), map.get(meal.getDateTime().toLocalDate()) > caloriesPerDay));
             }
         }
         return list;
@@ -51,6 +47,5 @@ public class UserMealsUtil {
                 .filter(userMeal -> TimeUtil.isBetween(userMeal.getDateTime().toLocalTime(), startTime, endTime))
                 .map(userMeal -> new UserMealWithExceed(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(), map.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
-
     }
 }
