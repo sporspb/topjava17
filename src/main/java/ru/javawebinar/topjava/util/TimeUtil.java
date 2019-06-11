@@ -4,14 +4,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class TimeUtil {
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static DateTimeFormatter getFormatter() {
-        return formatter;
-    }
-
-    public static void setFormatter(DateTimeFormatter formatter) {
-        TimeUtil.formatter = formatter;
+        return FORMATTER;
     }
 
     public static boolean isBetween(LocalTime lt, LocalTime startTime, LocalTime endTime) {

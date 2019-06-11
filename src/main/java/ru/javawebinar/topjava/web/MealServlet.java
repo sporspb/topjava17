@@ -1,8 +1,8 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.Storage.AbstractMealStorage;
 import ru.javawebinar.topjava.Storage.MapMealStorage;
+import ru.javawebinar.topjava.Storage.MealStorage;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
@@ -19,7 +19,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
-    private final AbstractMealStorage storage = new MapMealStorage();
+    private final MealStorage storage = new MapMealStorage();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -28,8 +28,8 @@ public class MealServlet extends HttpServlet {
         LocalDateTime date = LocalDateTime.parse(request.getParameter("dateTime"), TimeUtil.getFormatter());
         String desc = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
-        if (id.equals("-1")) {
-            storage.save(new Meal(MapMealStorage.COUNT.incrementAndGet(), date, desc, calories));
+        if (id == null || id.length() == 0) {
+            storage.save(new Meal(date, desc, calories));
         } else {
             storage.update(new Meal(Integer.parseInt(id), date, desc, calories));
         }
@@ -43,13 +43,8 @@ public class MealServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         String action = request.getParameter("action");
-        if (action == null) {
-            log.info("getAll");
-            request.setAttribute("meals", MealsUtil.getFilteredWithExcess(storage.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
-            request.getRequestDispatcher("meals.jsp").forward(request, response);
-            return;
-        }
-        switch (action) {
+
+        switch (action == null ? "list" : action) {
             case "delete":
                 int id = Integer.parseInt(request.getParameter("id"));
                 log.info("delete {}", id);
@@ -58,7 +53,7 @@ public class MealServlet extends HttpServlet {
                 break;
             case "add":
                 log.info("add");
-                request.setAttribute("meal", Meal.EMPTYMEAL);
+                request.setAttribute("meal", new Meal(LocalDateTime.of(1111, 11, 11, 11, 11), "description", 0));
                 request.getRequestDispatcher("edit.jsp").forward(request, response);
                 break;
             case "edit":
@@ -67,8 +62,12 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meal", storage.get(id));
                 request.getRequestDispatcher("edit.jsp").forward(request, response);
                 break;
+            case "list":
             default:
-                throw new IllegalArgumentException(String.format("Action %s is illegal", action));
+                log.info("getAll");
+                request.setAttribute("meals", MealsUtil.getFilteredWithExcess(storage.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
+                request.getRequestDispatcher("meals.jsp").forward(request, response);
+                break;
         }
     }
 }
