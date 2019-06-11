@@ -28,13 +28,13 @@
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td>${meal.excess}</td>
-                    <td><a href="meals?uuid=${meal}&action=edit" class="button">Edit</a></td>
-                    <td><a href="meals?uuid=${meal}&action=delete" class="button">Delete</a></td>
+                    <td><a href="meals?id=${meal.id}&action=edit" class="button">Edit</a></td>
+                    <td><a href="meals?id=${meal.id}&action=delete" class="button">Delete</a></td>
                 </tr>
             </c:forEach>
         </table>
         <br>
-        <a href="meals?uuid=${meal}&action=add" class="button">ADD NEW MEAL</a>
+        <a href="meals?action=add" class="button">ADD NEW MEAL</a>
     </c:if>
 </section>
 </body>
