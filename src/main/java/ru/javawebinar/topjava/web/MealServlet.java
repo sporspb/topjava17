@@ -1,9 +1,9 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.Storage.MapMealStorage;
-import ru.javawebinar.topjava.Storage.MealStorage;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.storage.MapMealStorage;
+import ru.javawebinar.topjava.storage.MealStorage;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
 
@@ -53,7 +53,7 @@ public class MealServlet extends HttpServlet {
                 break;
             case "add":
                 log.info("add");
-                request.setAttribute("meal", new Meal(LocalDateTime.of(1111, 11, 11, 11, 11), "description", 0));
+                request.setAttribute("meal", new Meal(LocalDateTime.now(), "description", 0));
                 request.getRequestDispatcher("edit.jsp").forward(request, response);
                 break;
             case "edit":

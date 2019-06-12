@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.Storage;
+package ru.javawebinar.topjava.storage;
 
 import ru.javawebinar.topjava.model.Meal;
 
@@ -24,19 +24,12 @@ public class MapMealStorage implements MealStorage {
         this.save(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
     }
 
-    public Map<Integer, Meal> getStorage() {
-        return storage;
-    }
-
-    public AtomicInteger getCount() {
-        return count;
-    }
-
     @Override
-    public void save(Meal meal) {
+    public Meal save(Meal meal) {
         int id = (meal.getId() == null) ? count.incrementAndGet() : meal.getId();
         meal.setId(id);
         storage.put(meal.getId(), meal);
+        return meal;
     }
 
     @Override
