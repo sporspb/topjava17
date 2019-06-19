@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -19,7 +20,6 @@ public class MealRestController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private MealService service;
-
 
     @Autowired
     public MealRestController(MealService service) {
@@ -30,31 +30,38 @@ public class MealRestController {
         int userId = SecurityUtil.authUserId();
         ValidationUtil.checkNew(meal);
         log.info("create {} user {}", meal, userId);
-        return service.create(meal, userId);
+        return service.create(userId, meal);
     }
 
     public void update(Meal meal, int id) {
         int userId = SecurityUtil.authUserId();
         ValidationUtil.assureIdConsistent(meal, id);
         log.info("update {} user {}", meal, userId);
-        service.update(meal, userId);
+        service.update(userId, meal);
     }
 
     public Meal get(int id) {
         int userId = SecurityUtil.authUserId();
         log.info("get meal {} user {}", id, userId);
-        return service.get(id, userId);
+        return service.get(userId, id);
     }
 
     public void delete(int id) {
         int userId = SecurityUtil.authUserId();
         log.info("delete meal {} user {}", id, userId);
-        service.delete(id, SecurityUtil.authUserId());
+        service.delete(SecurityUtil.authUserId(), id);
     }
 
     public List<MealTo> getAll() {
         int userId = SecurityUtil.authUserId();
         log.info("getAll user {}", userId);
         return MealsUtil.getWithExcess(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
+    }
+
+    public List<MealTo> getAllByDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        int userId = SecurityUtil.authUserId();
+        log.info("getAll by DateTime, user {}", userId);
+        List<Meal> mealsDateTimeFiltered = service.getByDateTime(userId, startDateTime, endDateTime);
+        return MealsUtil.getWithExcess(mealsDateTimeFiltered, SecurityUtil.authUserCaloriesPerDay());
     }
 }
