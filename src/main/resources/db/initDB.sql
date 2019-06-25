@@ -34,3 +34,7 @@ create table meals
     calories    integer                           not null,
     foreign key (user_id) references users (id) on DELETE cascade
 );
+
+create unique index meals_datetime_index
+    on meals (user_id, datetime);
+
