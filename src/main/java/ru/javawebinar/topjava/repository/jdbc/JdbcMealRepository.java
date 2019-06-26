@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class JdbcMealRepositoryImpl implements MealRepository {
+public class JdbcMealRepository implements MealRepository {
 
     private static final BeanPropertyRowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
@@ -26,7 +26,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     private final SimpleJdbcInsert insertMeal;
 
     @Autowired
-    public JdbcMealRepositoryImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
@@ -48,8 +48,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
             meal.setId(newKey.intValue());
         } else if (namedParameterJdbcTemplate.update(
                 "UPDATE meals SET datetime=:datetime, description=:description, " +
-                        "calories=:calories WHERE id=:id", map
-        ) == 0) {
+                        "calories=:calories WHERE id=:id AND user_id=:user_id", map) == 0) {
             return null;
         }
         return meal;

@@ -29,7 +29,7 @@ create table meals
 (
     id          integer primary key default nextval('global_seq'),
     user_id     INTEGER                           NOT NULL,
-    dateTime    timestamp           default now() not null,
+    datetime    timestamp           default now() not null,
     description VARCHAR                           not null,
     calories    integer                           not null,
     foreign key (user_id) references users (id) on DELETE cascade
