@@ -53,7 +53,7 @@ public class MealTestData {
     }
 
     public static ResultMatcher contentJson(Meal expected) {
-        return result -> assertMatch(readFromJsonMvcResult(result, Meal.class), expected);
+        return result -> assertThat(readFromJsonMvcResult(result, Meal.class)).isEqualTo(expected);
     }
 
     public static ResultMatcher contentJson(MealTo... expected) {
@@ -61,6 +61,6 @@ public class MealTestData {
     }
 
     public static ResultMatcher contentJson(Iterable<MealTo> expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, MealTo.class), expected);
+        return result -> assertThat(readListFromJsonMvcResult(result, MealTo.class)).isEqualTo(expected);
     }
 }
