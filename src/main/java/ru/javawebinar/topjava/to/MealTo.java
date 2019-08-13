@@ -55,18 +55,17 @@ public class MealTo extends BaseTo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MealTo that = (MealTo) o;
-        return calories == that.calories &&
-                excess == that.excess &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(dateTime, that.dateTime) &&
-                Objects.equals(description, that.description);
+        if (!(o instanceof MealTo)) return false;
+        MealTo mealTo = (MealTo) o;
+        return isExcess() == mealTo.isExcess() &&
+                Objects.equals(getDateTime(), mealTo.getDateTime()) &&
+                Objects.equals(getDescription(), mealTo.getDescription()) &&
+                Objects.equals(getCalories(), mealTo.getCalories());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dateTime, description, calories, excess);
+        return Objects.hash(getDateTime(), getDescription(), getCalories(), isExcess());
     }
 
     @Override
