@@ -21,7 +21,7 @@ public class MealTo extends BaseTo {
 
     @NotNull
     @Range(min = 10, max = 5000)
-    private int calories;
+    private Integer calories;
 
     private boolean excess;
 
@@ -78,5 +78,21 @@ public class MealTo extends BaseTo {
                 ", calories=" + calories +
                 ", excess=" + excess +
                 '}';
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(Integer calories) {
+        this.calories = calories;
+    }
+
+    public void setExcess(boolean excess) {
+        this.excess = excess;
     }
 }
